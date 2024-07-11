@@ -1,0 +1,4 @@
+Flask
+werkzeug
+sqlite3
+chart.js
