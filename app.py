@@ -4,7 +4,7 @@ import os
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/videos'
-#app.config['ALLOWED_EXTENSIONS'] = {'mp4', 'avi', 'mov', 'mkv'}  # Define allowed file extensions
+app.config['ALLOWED_EXTENSIONS'] = {'mp4', 'avi', 'mov', 'mkv'}  # Define allowed file extensions
 MOVIE_DIRECTORY = os.path.join(os.getcwd(), app.config['UPLOAD_FOLDER'])
 
 # Function to check if file extension is allowed
