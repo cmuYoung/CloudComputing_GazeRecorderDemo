@@ -165,11 +165,9 @@
             <h3>Select Video to Play:</h3>
             <form onsubmit="playVideo(); return false;">
                 <select id="videoSelect" name="filename">
-                    <option value="brown_dog1.mp4">brown_dog1.mp4</option>
-                    <option value="white_dog1.mp4">white_dog1.mp4</option>
-                    <option value="flower2.mp4">flower2.mp4</option>
-                    <option value="flower3.mp4">flower3.mp4</option>
-                    <option value="flower1.mp4">flower1.mp4</option>
+		    {% for movie in movies %}
+                        <option value="{{ movie }}">{{ movie }}</a></li>
+                    {% endfor %}
                 </select>
                 <br><br>
                 <input type="submit" value="Play">
