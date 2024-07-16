@@ -4,7 +4,8 @@ import os
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/videos'
-app.config['ALLOWED_EXTENSIONS'] = {'mp4', 'avi', 'mov', 'mkv'}  # Define allowed file extensions
+#app.config['ALLOWED_EXTENSIONS'] = {'mp4', 'avi', 'mov', 'mkv'}  # Define allowed file extensions
+MOVIE_DIRECTORY = os.path.join(os.getcwd(), app.config['UPLOAD_FOLDER'])
 
 # Function to check if file extension is allowed
 def allowed_file(filename):
@@ -30,9 +31,9 @@ def index():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('index'))  # Redirect to home page after upload
     
-    # Get list of uploaded files
-    files = os.listdir(app.config['UPLOAD_FOLDER'])
-    return render_template('index.html', files=files)
+    # List all movie files in the movies directory
+    movie_files = [f for f in os.listdir(MOVIE_DIRECTORY) if f.endswith(('mp4', 'avi', 'mov', 'mkv'))]
+    return render_template('index.html', movies=movie_files)
 
 if __name__ == '__main__':
     app.run(debug=True)
