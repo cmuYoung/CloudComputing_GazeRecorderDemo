@@ -33,6 +33,10 @@ def index():
     
     # List all movie files in the movies directory
     movie_files = [f for f in os.listdir(MOVIE_DIRECTORY) if f.endswith(('mp4', 'avi', 'mov', 'mkv'))]
+
+    # Sort movie files by modification time in descending order
+    movie_files.sort(key=lambda x: os.path.getmtime(os.path.join(MOVIE_DIRECTORY, x)), reverse=True)
+
     return render_template('index.html', movies=movie_files)
 
 if __name__ == '__main__':
