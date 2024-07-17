@@ -25,7 +25,7 @@ gaze_data_types = [data[0] for data in gaze_data_types]
 selected_gaze_data = st.selectbox('Select Gaze Data', gaze_data_types)
 
 # Query data for the selected gaze data type, ordered by ID
-query = f"SELECT docX, docY FROM GazeData WHERE header = '{selected_gaze_data}' AND state = 0 ORDER BY id"
+query = f"SELECT docX, docY FROM GazeData WHERE header = '{selected_gaze_data}' AND state = 0 ORDER BY time ASC"
 data = pd.read_sql_query(query, conn)
 conn.close()
 
