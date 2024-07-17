@@ -38,6 +38,10 @@ def init_db():
                 header TEXT
             )
         ''')
+
+        # Create a composite index for header and time
+        conn.execute('CREATE INDEX IF NOT EXISTS idx_header_time ON GazeData (header, time);')
+
         conn.commit()
 
 init_db()
