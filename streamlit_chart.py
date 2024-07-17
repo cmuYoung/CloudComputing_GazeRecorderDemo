@@ -5,6 +5,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
 
+SCREEN_WIDTH = 4480
+SCREEN_HEIGHT = 2520
+
 # Set up Streamlit app title
 st.title("Gaze Data Visualization")
 
@@ -18,14 +21,15 @@ sns.set(font_scale=1)
 conn = sqlite3.connect('gazedata.db')
 
 # Get distinct gaze data types
-gaze_data_types = conn.execute('SELECT DISTINCT header FROM GazeData ORDER BY header DESC').fetchall()
-gaze_data_types = [data[0] for data in gaze_data_types]
+gaze_data_headers = conn.execute('SELECT DISTINCT header FROM GazeData ORDER BY header DESC').fetchall()
+gaze_data_headers = [data[0] for data in gaze_data_headers]
 
 # Streamlit UI for selecting gaze data
-selected_gaze_data = st.selectbox('Select Gaze Data', gaze_data_types)
+selected_gaze_data = st.selectbox('Select Gaze Data', gaze_data_headers)
 
 # Query data for the selected gaze data type, ordered by ID
 query = f"SELECT docX, docY FROM GazeData WHERE header = '{selected_gaze_data}' AND state = 0 ORDER BY time ASC"
+
 data = pd.read_sql_query(query, conn)
 conn.close()
 
@@ -37,11 +41,14 @@ count = 0
 
 # Process data for plotting
 for index, row in data.iterrows():
-    x = row['docX']
-    y = 1 - row['docY']  # Reverse y-coordinate
+    #x = row['docX']
+    #y = 1 - row['docY']  # Reverse y-coordinate
+    x = row['docX'] / SCREEN_WIDTH
+    y = row['docY'] / SCREEN_HEIGHT # For docX, no need to reserve it?
     count += 1
 
     # Check engagement in the specified area
+    #if 0.3 < x < 0.6 and 0.25 < y < 0.6:
     if 0.3 < x < 0.6 and 0.25 < y < 0.6:
         engaged += 1
 
