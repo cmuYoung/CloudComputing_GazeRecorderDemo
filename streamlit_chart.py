@@ -70,7 +70,7 @@ st.pyplot(plt)
 plt.grid(True)
 
 # Display sample data (10 lines)
-st.subheader("Sample Data")
+st.subheader("Random Sample Data")
 sample_data = data.sample(n=10)  # Random sample of 10 lines
 st.write(sample_data)
 
