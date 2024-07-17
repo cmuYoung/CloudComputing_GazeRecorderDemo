@@ -69,3 +69,27 @@ st.pyplot(plt)
 # Show grid
 plt.grid(True)
 
+# Display sample data (10 lines)
+st.subheader("Sample Data")
+sample_data = data.sample(n=10)  # Random sample of 10 lines
+st.write(sample_data)
+
+# Show data statistics
+st.subheader("Data Statistics")
+st.write(data.describe())
+
+# Box plots for docX and docY
+fig, axes = plt.subplots(1, 2, figsize=(20, 10))
+
+# Box plot for docX
+sns.boxplot(ax=axes[0], x=data['docX'], color='lightblue')
+axes[0].set_title('Box Plot of docX', fontsize=25)
+axes[0].set_xlabel('docX', fontsize=20)
+
+# Box plot for docY
+sns.boxplot(ax=axes[1], x=data['docY'], color='lightgreen')
+axes[1].set_title('Box Plot of docY', fontsize=25)
+axes[1].set_xlabel('docY', fontsize=20)
+
+# Display box plots in Streamlit
+st.pyplot(fig)
