@@ -18,7 +18,7 @@ sns.set(font_scale=1)
 conn = sqlite3.connect('gazedata.db')
 
 # Get distinct gaze data types
-gaze_data_types = conn.execute('SELECT DISTINCT header FROM GazeData ORDER BY header').fetchall()
+gaze_data_types = conn.execute('SELECT DISTINCT header FROM GazeData ORDER BY header DESC').fetchall()
 gaze_data_types = [data[0] for data in gaze_data_types]
 
 # Streamlit UI for selecting gaze data
