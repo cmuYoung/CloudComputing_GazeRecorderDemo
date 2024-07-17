@@ -1,34 +1,71 @@
+# Import libraries
 import sqlite3
 import pandas as pd
-import streamlit as st
 import matplotlib.pyplot as plt
+import seaborn as sns
+import streamlit as st
+
+# Set up Streamlit app title
+st.title("Gaze Data Visualization")
+
+# Increase graph resolution dots per inch
+plt.figure(dpi=600)
+
+sns.set(style="whitegrid", color_codes=True)
+sns.set(font_scale=1)
 
 # Connect to the SQLite database
 conn = sqlite3.connect('gazedata.db')
 
-# Get distinct headers
-headers = conn.execute('SELECT DISTINCT header FROM GazeData').fetchall()
-headers = [header[0] for header in headers]
+# Get distinct gaze data types
+gaze_data_types = conn.execute('SELECT DISTINCT header FROM GazeData').fetchall()
+gaze_data_types = [data[0] for data in gaze_data_types]
 
-# Streamlit UI to select header
-selected_header = st.selectbox('Select Header', headers)
+# Streamlit UI for selecting gaze data
+selected_gaze_data = st.selectbox('Select Gaze Data', gaze_data_types)
 
-# Query data for the selected header, ordered by ID
-query = f"SELECT docX, docY FROM GazeData WHERE header = '{selected_header}' AND state = 0 ORDER BY id"
+# Query data for the selected gaze data type, ordered by ID
+query = f"SELECT docX, docY FROM GazeData WHERE header = '{selected_gaze_data}' AND state = 0 ORDER BY id"
 data = pd.read_sql_query(query, conn)
 conn.close()
 
-# Check if data is available
-if not data.empty:
-    # Plot the data using matplotlib
-    fig, ax = plt.subplots()
-    ax.scatter(data['docX'], data['docY'])
-    ax.set_xlabel('Gaze X in Document Coordinates')
-    ax.set_ylabel('Gaze Y in Document Coordinates')
-    ax.set_title(f'Gaze Data Scatter Plot for Header: {selected_header}')
+# Prepare lists for plotting
+xList = []
+yList = []
+engaged = 0
+count = 0
 
-    # Display the plot in Streamlit
-    st.pyplot(fig)
-else:
-    st.write(f"No valid gaze data found for header: {selected_header}")
+# Process data for plotting
+for index, row in data.iterrows():
+    x = row['docX']
+    y = 1 - row['docY']  # Reverse y-coordinate
+    count += 1
+
+    # Check engagement in the specified area
+    if 0.3 < x < 0.6 and 0.25 < y < 0.6:
+        engaged += 1
+
+    xList.append(x)
+    yList.append(y)
+
+# Display engagement count and total count
+st.write(f"Engaged Points: {engaged}")
+st.write(f"Total Points: {count}")
+
+# Plot the scatter plot
+plt.figure(figsize=(20, 20))
+plt.scatter(xList, yList, color='darkred', marker='D', s=20)
+plt.xticks(fontsize=25)
+plt.yticks(fontsize=25)
+
+# Add labels and title
+plt.title('Eye Tracking', fontsize=100)
+plt.xlabel('X-Coordinate', fontsize=100)
+plt.ylabel('Y-Coordinate', fontsize=100)
+
+# Display the plot in Streamlit
+st.pyplot(plt)
+
+# Show grid
+plt.grid(True)
 
