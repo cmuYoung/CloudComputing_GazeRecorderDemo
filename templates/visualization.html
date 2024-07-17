@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gaze Data Visualization</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <h1>Gaze Data Visualization for {{ header }}</h1>
+    <div id="chart"></div>
+
+    <script>
+        const gazeData = {{ gaze_data|tojson }};
+        
+        const xData = gazeData.map(data => data.docX);
+        const yData = gazeData.map(data => data.docY);
+        const timeData = gazeData.map(data => data.time);
+
+        const trace = {
+            x: timeData,
+            y: yData,
+            mode: 'lines+markers',
+            type: 'scatter',
+            name: 'Gaze Y Position',
+            marker: { size: 6 },
+            line: { shape: 'linear' }
+        };
+
+        const trace2 = {
+            x: timeData,
+            y: xData,
+            mode: 'lines+markers',
+            type: 'scatter',
+            name: 'Gaze X Position',
+            marker: { size: 6 },
+            line: { shape: 'linear' }
+        };
+
+        const layout = {
+            title: 'Gaze Position Over Time',
+            xaxis: { title: 'Time' },
+            yaxis: { title: 'Gaze Position' }
+        };
+
+        const data = [trace, trace2];
+        
+        Plotly.newPlot('chart', data, layout);
+    </script>
+</body>
+</html>
+

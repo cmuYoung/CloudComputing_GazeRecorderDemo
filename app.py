@@ -1,15 +1,68 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
 import os
+from flask_sqlalchemy import SQLAlchemy
+import sqlite3
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/videos'
 app.config['ALLOWED_EXTENSIONS'] = {'mp4', 'avi', 'mov', 'mkv'}  # Define allowed file extensions
 MOVIE_DIRECTORY = os.path.join(os.getcwd(), app.config['UPLOAD_FOLDER'])
+DATABASE = 'gazedata.db'
 
 # Function to check if file extension is allowed
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+# Function to get a database connection
+def get_db_connection():
+    conn = sqlite3.connect(DATABASE)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+# Initialize the database and create the table
+def init_db():
+    with get_db_connection() as conn:
+        conn.execute('''
+            CREATE TABLE IF NOT EXISTS GazeData (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                docX REAL,
+                docY REAL,
+                time REAL,
+                state INTEGER,
+                headX REAL,
+                headY REAL,
+                headZ REAL,
+                headYaw REAL,
+                headPitch REAL,
+                headRoll REAL,
+                header TEXT
+            )
+        ''')
+        conn.commit()
+
+init_db()
+
+@app.route('/store_gaze_data', methods=['POST'])
+def store_gaze_data():
+    data = request.json
+    with get_db_connection() as conn:
+        conn.execute('''
+            INSERT INTO GazeData (docX, docY, time, state, headX, headY, headZ, headYaw, headPitch, headRoll, header)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (data['docX'], data['docY'], data['time'], data['state'],
+              data.get('headX'), data.get('headY'), data.get('headZ'),
+              data.get('headYaw'), data.get('headPitch'), data.get('headRoll'),
+              data.get('header')))
+        conn.commit()
+    return jsonify({'message': 'Data stored successfully'}), 201
+
+@app.route('/visualize/<header>', methods=['GET'])
+def visualize(header):
+    with get_db_connection() as conn:
+        gaze_data = conn.execute('SELECT * FROM GazeData WHERE header = ?', (header,)).fetchall()
+    return render_template('visualization.html', gaze_data=gaze_data, header=header)
+
 
 # Home page with upload form and dropdown
 @app.route('/', methods=['GET', 'POST'])
@@ -38,7 +91,11 @@ def index():
     # Sort movie files by modification time in descending order
     movie_files.sort(key=lambda x: os.path.getmtime(os.path.join(MOVIE_DIRECTORY, x)), reverse=True)
 
-    return render_template('index.html', movies=movie_files)
+    # Fetch headers for visualization
+    with get_db_connection() as conn:
+        headers = conn.execute('SELECT DISTINCT header FROM GazeData').fetchall()
+
+    return render_template('index.html', movies=movie_files, headers=headers)
 
 if __name__ == '__main__':
     app.run(debug=True)

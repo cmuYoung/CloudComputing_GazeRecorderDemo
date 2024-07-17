@@ -6,6 +6,7 @@
     <title>Video Upload and Player</title>
     <script src="https://api.gazerecorder.com/GazeCloudAPI.js?v=1.2"></script>
     <script src="https://api.gazerecorder.com/heatmapLive.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         /* Reset default margins and paddings */
         body, html {
@@ -69,6 +70,9 @@
     </style>
 
     <script type="text/javascript">
+
+	let startTime;
+
         function PlotGaze(GazeData) {
             /*
             GazeData.state // 0: valid gaze data; -1 : face tracking lost, 1 : gaze uncalibrated
@@ -100,6 +104,33 @@
                         gaze.style.display = 'block';
                 }
             }
+
+	    // Send the gaze data to the server
+            $.ajax({
+                url: '/store_gaze_data',
+                type: 'POST',
+                contentType: 'application/json',
+		data: JSON.stringify({
+                    docX: GazeData.docX,
+                    docY: GazeData.docY,
+                    time: GazeData.time,
+                    state: GazeData.state,
+                    headX: GazeData.headX,
+                    headY: GazeData.headY,
+                    headZ: GazeData.headZ,
+                    headYaw: GazeData.headYaw,
+                    headPitch: GazeData.headPitch,
+                    headRoll: GazeData.headRoll,
+                    header: startTime // Include the header information
+                }),
+                success: function(response) {
+                    console.log('Data stored successfully');
+                },
+                error: function(error) {
+                    console.log('Error storing data', error);
+                }
+            });
+
         }
 
         //////set callbacks/////////
@@ -124,6 +155,8 @@
             document.getElementById("startid").style.display = 'none';
             document.getElementById("stopid").style.display = 'block';
             GazeCloudAPI.StartEyeTracking();
+	    startTime = new Date().toISOString();
+	    document.getElementById("headerInfo").innerHTML = "Tracking started at: " + startTime;
             if (false)
                 GazeCloudAPI.SetFps(15);
         }
@@ -180,6 +213,7 @@
                 <p id="GazeData"></p>
                 <p id="HeadPhoseData"></p>
                 <p id="HeadRotData"></p>
+                <p id="headerInfo"></p>
             </div>
             <div id="gaze" style='position: absolute;display:none;width: 100px;height: 100px;border-radius: 50%;border: solid 2px rgba(255, 255,255, .2); box-shadow: 0 0 100px 3px rgba(125, 125,125, .5); pointer-events: none; z-index: 999999'></div>
             <label for="ShowHeatMapId">
@@ -193,6 +227,10 @@
                 <source src="" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
+
+	    <!-- Placeholder for visualization -->
+            <div id="visualization"></div>
+
         </div>
     </div>
 </body>
