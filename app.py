@@ -33,7 +33,7 @@ def index():
     
     # List all movie files in the movies directory
     #movie_files = [f for f in os.listdir(MOVIE_DIRECTORY) if f.endswith({'mp4', 'avi', 'mov', 'mkv'})]
-    movie_files = [f for f in os.listdir(MOVIE_DIRECTORY) if f.endswith(app.config['ALLOWED_EXTENSIONS'])]
+    movie_files = [f for f in os.listdir(MOVIE_DIRECTORY) if f.endswith(tuple(app.config['ALLOWED_EXTENSIONS']))]
 
     # Sort movie files by modification time in descending order
     movie_files.sort(key=lambda x: os.path.getmtime(os.path.join(MOVIE_DIRECTORY, x)), reverse=True)
