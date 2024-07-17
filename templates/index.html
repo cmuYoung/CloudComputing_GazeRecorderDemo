@@ -188,7 +188,6 @@
             <h5>CMU Cloud Class Demo</h5>
             <br>
             <h5>WebCam Online Eye-Tracking (Gaze Recorder)</h5>
-            <hr>
             <h3>Upload a Video</h3>
             <form method="post" enctype="multipart/form-data">
                 <input type="file" name="file" accept=".mp4, .avi, .mov, .mkv">
@@ -220,7 +219,7 @@
                 Show heatmap
                 <input id="ShowHeatMapId" type="checkbox" checked="" onclick='handleClickHeatMap(this);'>
             </label>
-	    <h3>Select Header for Visualization</h3>
+	    <h3>Select GazeData for Visualization</h3>
                 <form action="/visualize" method="get">
                     <select name="header">
                     {% for header in headers %}
