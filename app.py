@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
 import os
-from flask_sqlalchemy import SQLAlchemy
 import sqlite3
 
 app = Flask(__name__)
