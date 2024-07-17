@@ -44,7 +44,7 @@ for index, row in data.iterrows():
     #x = row['docX']
     #y = 1 - row['docY']  # Reverse y-coordinate
     x = row['docX'] / SCREEN_WIDTH
-    y = row['docY'] / SCREEN_HEIGHT # For docX, no need to reserve it?
+    y = 1 - (row['docY'] / SCREEN_HEIGHT) 
     count += 1
 
     # Check engagement in the specified area

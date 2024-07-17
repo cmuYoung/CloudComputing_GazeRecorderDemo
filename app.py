@@ -25,6 +25,8 @@ def init_db():
         conn.execute('''
             CREATE TABLE IF NOT EXISTS GazeData (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                X REAL,
+                Y REAL,
                 docX REAL,
                 docY REAL,
                 time REAL,
@@ -51,9 +53,9 @@ def store_gaze_data():
     data = request.json
     with get_db_connection() as conn:
         conn.execute('''
-            INSERT INTO GazeData (docX, docY, time, state, headX, headY, headZ, headYaw, headPitch, headRoll, header)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (data['docX'], data['docY'], data['time'], data['state'],
+            INSERT INTO GazeData (X, Y, docX, docY, time, state, headX, headY, headZ, headYaw, headPitch, headRoll, header)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (data['X'], data['Y'], data['docX'], data['docY'], data['time'], data['state'],
               data.get('headX'), data.get('headY'), data.get('headZ'),
               data.get('headYaw'), data.get('headPitch'), data.get('headRoll'),
               data.get('header')))

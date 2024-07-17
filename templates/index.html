@@ -85,15 +85,15 @@
             document.getElementById("HeadPhoseData").innerHTML = " HeadX: " + GazeData.HeadX + " HeadY: " + GazeData.HeadY + " HeadZ: " + GazeData.HeadZ;
             document.getElementById("HeadRotData").innerHTML = " Yaw: " + GazeData.HeadYaw + " Pitch: " + GazeData.HeadPitch + " Roll: " + GazeData.HeadRoll;
 
+            var x = GazeData.docX;
+            var y = GazeData.docY;
+
+            var gaze = document.getElementById("gaze");
+            x -= gaze.clientWidth / 2;
+            y -= gaze.clientHeight / 2;
+
             if (!document.getElementById("ShowHeatMapId").checked) // gaze plot
             {
-                var x = GazeData.docX;
-                var y = GazeData.docY;
-
-                var gaze = document.getElementById("gaze");
-                x -= gaze.clientWidth / 2;
-                y -= gaze.clientHeight / 2;
-
                 gaze.style.left = x + "px";
                 gaze.style.top = y + "px";
 
@@ -112,6 +112,8 @@
                 type: 'POST',
                 contentType: 'application/json',
 		data: JSON.stringify({
+                    X: x,
+                    Y: y,
                     docX: GazeData.docX,
                     docY: GazeData.docY,
                     time: GazeData.time,
