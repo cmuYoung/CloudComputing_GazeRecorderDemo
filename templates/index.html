@@ -220,6 +220,15 @@
                 Show heatmap
                 <input id="ShowHeatMapId" type="checkbox" checked="" onclick='handleClickHeatMap(this);'>
             </label>
+	    <h3>Select Header for Visualization</h3>
+                <form action="/visualize" method="get">
+                    <select name="header">
+                    {% for header in headers %}
+                        <option value="{{ header['header'] }}">{{ header['header'] }}</option>
+                    {% endfor %}
+                    </select>
+                    <input type="submit" value="Visualize">
+                </form>
         </div>
         <div class="main-panel">
             <h3>Video Player:</h3>

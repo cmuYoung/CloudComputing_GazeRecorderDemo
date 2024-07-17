@@ -56,8 +56,10 @@ def store_gaze_data():
         conn.commit()
     return jsonify({'message': 'Data stored successfully'}), 201
 
-@app.route('/visualize/<header>', methods=['GET'])
-def visualize(header):
+
+@app.route('/visualize', methods=['GET'])
+def visualize():
+    header = request.args.get('header')
     with get_db_connection() as conn:
         gaze_data = conn.execute('SELECT * FROM GazeData WHERE header = ?', (header,)).fetchall()
     return render_template('visualization.html', gaze_data=gaze_data, header=header)
