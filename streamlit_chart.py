@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
 
-SCREEN_WIDTH = 4480
-SCREEN_HEIGHT = 2520
+SCREEN_WIDTH = 4480 / 2
+SCREEN_HEIGHT = 2520 / 2
 
 # Set up Streamlit app title
 st.title("Gaze Data Visualization")
