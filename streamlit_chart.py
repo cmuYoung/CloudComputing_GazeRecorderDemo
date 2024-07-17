@@ -89,12 +89,12 @@ st.write(data.describe())
 fig, axes = plt.subplots(1, 2, figsize=(20, 10))
 
 # Box plot for X
-sns.boxplot(ax=axes[0], x=data['X'], color='lightblue')
+sns.boxplot(ax=axes[0], x=data['X']/SCREEN_WIDTH, color='lightblue')
 axes[0].set_title('Box Plot of X', fontsize=25)
 axes[0].set_xlabel('X', fontsize=20)
 
 # Box plot for Y
-sns.boxplot(ax=axes[1], x=data['Y'], color='lightgreen')
+sns.boxplot(ax=axes[1], x=data['Y']/SCREEN_HEIGHT, color='lightgreen')
 axes[1].set_title('Box Plot of Y', fontsize=25)
 axes[1].set_xlabel('Y', fontsize=20)
 
