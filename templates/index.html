@@ -92,6 +92,9 @@
             x -= gaze.clientWidth / 2;
             y -= gaze.clientHeight / 2;
 
+	    print('++ clientWidth = '+ gaze.clientWidth)
+	    print('++ clientHeight = '+ gaze.gaze.clientHeight)
+
             if (!document.getElementById("ShowHeatMapId").checked) // gaze plot
             {
                 gaze.style.left = x + "px";
