@@ -92,8 +92,10 @@
             x -= gaze.clientWidth / 2;
             y -= gaze.clientHeight / 2;
 
+	    /*
 	    console.log('++ clientWidth = '+ gaze.clientWidth)
 	    console.log('++ clientHeight = '+ gaze.gaze.clientHeight)
+	    */
 
             if (!document.getElementById("ShowHeatMapId").checked) // gaze plot
             {
@@ -109,14 +111,17 @@
                 }
             }
 
+	    let x_ratio = x / gaze.clientWidth;
+	    let y_ratio = y / gaze.clientHeight;
+
 	    // Send the gaze data to the server
             $.ajax({
                 url: '/store_gaze_data',
                 type: 'POST',
                 contentType: 'application/json',
 		data: JSON.stringify({
-                    X: x,
-                    Y: y,
+                    X: x_ratio,
+                    Y: y_ratio,
                     docX: GazeData.docX,
                     docY: GazeData.docY,
                     time: GazeData.time,

@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
 
-SCREEN_WIDTH = 4480 / 2
-SCREEN_HEIGHT = 2520 / 2
+#SCREEN_WIDTH = 4480 / 2
+#SCREEN_HEIGHT = 2520 / 2
 
 # Set up Streamlit app title
 st.title("Gaze Data Visualization")
@@ -28,7 +28,8 @@ gaze_data_headers = [data[0] for data in gaze_data_headers]
 selected_gaze_data = st.selectbox('Select Gaze Data', gaze_data_headers)
 
 # Query data for the selected gaze data type, ordered by ID
-query = f"SELECT X/{SCREEN_WIDTH} AS X, Y/{SCREEN_HEIGHT} AS Y FROM GazeData WHERE header = '{selected_gaze_data}' AND state = 0 ORDER BY time ASC"
+#query = f"SELECT X/{SCREEN_WIDTH} AS X, Y/{SCREEN_HEIGHT} AS Y FROM GazeData WHERE header = '{selected_gaze_data}' AND state = 0 ORDER BY time ASC"
+query = f"SELECT X, Y FROM GazeData WHERE header = '{selected_gaze_data}' AND state = 0 ORDER BY time ASC"
 
 data = pd.read_sql_query(query, conn)
 conn.close()
