@@ -114,14 +114,16 @@
 	    let x_ratio = x / gaze.clientWidth;
 	    let y_ratio = y / gaze.clientHeight;
 
+            //X: x_ratio,
+            //Y: y_ratio,
 	    // Send the gaze data to the server
             $.ajax({
                 url: '/store_gaze_data',
                 type: 'POST',
                 contentType: 'application/json',
 		data: JSON.stringify({
-                    X: x_ratio,
-                    Y: y_ratio,
+                    X: x,
+                    Y: y,
                     docX: GazeData.docX,
                     docY: GazeData.docY,
                     time: GazeData.time,
