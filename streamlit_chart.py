@@ -76,6 +76,11 @@ plt.grid(True)
 
 # Display sample data (10 lines)
 st.subheader("Random Sample Data")
+
+if data.empty:
+    st.write("No data available to display.")
+    st.stop()  # Stop execution if data is empty
+
 sample_data = data.sample(n=10)  # Random sample of 10 lines
 st.write(sample_data)
 
