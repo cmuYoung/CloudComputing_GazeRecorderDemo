@@ -67,6 +67,23 @@
             font-size: 16px;
             border-radius: 8px;
         }
+
+        .buttonDataWebsite {
+            background-color: rgb(252, 186, 3);
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            display: block;
+            margin: auto;
+            font-size: 16px;
+            border-radius: 8px;
+        }
     </style>
 
     <script type="text/javascript">
@@ -232,6 +249,12 @@
                 Show heatmap
                 <input id="ShowHeatMapId" type="checkbox" checked="" onclick='handleClickHeatMap(this);'>
             </label>
+            <button class='buttonDataWebsite' type="button" onclick="openDataWebsite()">Open Gaze Data Visualization WebApp</button>
+            <script>
+                function openDataWebsite() {
+                    window.open("http://svyoungscholars.org:8502", "_blank", "width=900,height=800");
+                }
+            </script>
 	    <!--h3>Select GazeData for Visualization</h3>
                 <form action="/visualize" method="get">
                     <select name="header">
